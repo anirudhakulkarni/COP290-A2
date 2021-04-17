@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
+#include "bits/stdc++.h"
 #define UP 0     //-y
 #define DOWN 1   //+y
 #define LEFT 2   //-x
@@ -14,13 +14,13 @@
 #define RED   fprintf(outfile, "%c%c%c", 0,0,255)
 
 #define nodeadend//generate a maze without any dead ends! (consequently, many solutions to maze)
-//#define prim    //enable this to generate mazes using prim's algorithm.
-#define backtrack//enable this to generate mazes using depth-first search. Don't enable both.
-//#define movie   //this option spams bitmaps to illustrate each step of generation.
-
+#define prim    //enable this to generate mazes using prim's algorithm.
+// #define backtrack//enable this to generate mazes using depth-first search. Don't enable both.
+// #define movie   //this option spams bitmaps to illustrate each step of generation.
+using namespace std;
 long numin=1;     //Number of cells in the maze.
-const int xsize=152;
-const int ysize=122;
+const int xsize=50;
+const int ysize=10;
 
 void initialize();
 void generate();
@@ -186,7 +186,7 @@ void savebmp(int xspecial, int yspecial){
 	int x, y, n;
 	int width=(xsize-1)*2-1;
 	int height=(ysize-1)*2-1;
-
+	int arr[height][width]={0};
 	extrabytes = (4 - ((width * 3) % 4))%4; 
 
 	char filename[200];
@@ -220,16 +220,16 @@ void savebmp(int xspecial, int yspecial){
 	for(y = 0; y <= height - 1; y++){
 		for(x = 0; x <= width - 1; x++){
 			if(x%2 == 1 && y%2 == 1){
-				if(x/2+1 == xspecial && y/2+1 == yspecial) RED;
+				if(x/2+1 == xspecial && y/2+1 == yspecial) {RED;}
 				else{
-					if(MAZE[x/2+1][y/2+1].in) WHITE; else BLACK;
+					if(MAZE[x/2+1][y/2+1].in) {BLACK;arr[y][x]=1;} else {WHITE;arr[y][x]=0;}
 				}
 			}else if(x%2 == 0 && y%2 == 0){
-				BLACK;
+				{WHITE;arr[y][x]=0;}
 			}else if(x%2 == 0 && y%2 == 1){
-				if(MAZE[x/2+1][y/2+1].left) BLACK; else WHITE;
+				if(MAZE[x/2+1][y/2+1].left) {WHITE;arr[y][x]=0;} else {BLACK;arr[y][x]=1;}
 			}else if(x%2 == 1 && y%2 == 0){
-				if(MAZE[x/2+1][y/2+1].up) BLACK; else WHITE;
+				if(MAZE[x/2+1][y/2+1].up) {WHITE;arr[y][x]=0;} else {BLACK;arr[y][x]=1;}
 			}
 		}
 		if (extrabytes){     // See above - BMP lines must be of lengths divisible by 4.
@@ -240,5 +240,13 @@ void savebmp(int xspecial, int yspecial){
 	}
 	printf("file printed: %s\n", filename); 
 	fclose(outfile);
+    freopen("./matrix.out", "w", stdout);
+
+	for(y = 0; y <= height - 1; y++){
+		for(x = 0; x <= width - 1; x++){
+			cout<<arr[height-1-y][x]<< " "; // Height is reversed as bmp saves image from bottom
+		}
+		cout<<endl;
+	}
 	return;
 }
