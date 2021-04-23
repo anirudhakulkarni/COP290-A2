@@ -3,6 +3,12 @@
 #include <cstring>
 #include <bits/stdc++.h>
 
+
+vector<vector<int>> maze_mat;
+pair<int, int> starting_point;
+pair<int, int> ending_point;
+vector<pair<int, int>> stone_coordinates;
+
 using namespace std;
 
 /*
@@ -31,6 +37,12 @@ public:
         }
         //cout << "here7" << endl;
         //cout << rows << " " << cols << endl;
+        start = starting_point.first * cols + starting_point.second;
+        end = ending_point.first * cols + ending_point.second;
+        for (auto stone_coor : stone_coordinates){
+            stone_loc.push_back(stone_coor.first * cols + stone_coor.second);
+            stones++;
+        }
         for (int row = 1; row < rows - 1; row++){
             for (int col = 1; col < cols - 1; col++){
                 //cout << maze[row][col] << " ";
@@ -40,17 +52,6 @@ public:
                 // cout << row+1 << " " << col << " " << maze[row+1][col] << endl;
                 // cout << row << " " << col-1 << " " << maze[row][col-1] << endl;
                 // cout << row << " " << col+1 << " " << maze[row][col+1] << endl;
-                if (maze[row][col] ==2){
-                    stones++;
-                    //cout << row << " " << col << " " << row*cols + col << endl;
-                    stone_loc.push_back(row*cols + col);
-                }
-                if (maze[row][col] == 3){
-                    start = row*cols + col;
-                }
-                if (maze[row][col] == 4){
-                    end = row*cols + col;
-                }
                 if (maze[row][col] > 0){
                     if (maze[row][col-1] > 0){
                         adj[row*cols + col].push_back(row*cols + col-1);
@@ -215,41 +216,38 @@ public:
     }
 };
 int main (int argc, char *argv[]) {
-  string line;
+//   string line;
   //cout << "here1" << endl;
-  int rows = atoi(argv[argc - 3]);
-  int cols = atoi(argv[argc - 2]);
 
-  ifstream myfile (argv[argc - 1]);
+//   ifstream myfile (argv[argc - 1]);
 
-  vector<vector<int>> maze_mat;
-  //cout << "here2" << endl;
-  if (myfile.is_open())
-  {
-    while ( getline (myfile,line) )
-    {
-        vector<int> row_vec;
+//   vector<vector<int>> maze_mat;
+//   //cout << "here2" << endl;
+//   if (myfile.is_open())
+//   {
+//     while ( getline (myfile,line) )
+//     {
+//         vector<int> row_vec;
         
 
-            string word = "";
-        for (auto x : line) 
-        {
-            if (x == ' ')
-            {
-                row_vec.push_back(stoi(word));
-                word = "";
-            }
-            else {
-                word = word + x;
-            }
-        }
-        row_vec.push_back(stoi(word));
-        maze_mat.push_back(row_vec);
-    }
-    myfile.close();
-    }
-
-    else cout << "Unable to open input file"; 
+//             string word = "";
+//         for (auto x : line) 
+//         {
+//             if (x == ' ')
+//             {
+//                 row_vec.push_back(stoi(word));
+//                 word = "";
+//             }
+//             else {
+//                 word = word + x;
+//             }
+//         }
+//         row_vec.push_back(stoi(word));
+//         maze_mat.push_back(row_vec);
+//     }
+//     myfile.close();
+//     }
+//     else cout << "Unable to open input file"; 
     //cout << "here2" << maze_mat.size() << " " << maze_mat[0].size() << endl;
     Graph G;
     G.constructGraph(maze_mat);
