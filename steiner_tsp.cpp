@@ -21,7 +21,7 @@ using namespace std;
 class Graph{
 
 public:
-    vector<int> adj[100];
+    vector<int> adj[100000];
     int start, end, stones, cols, rows, size;
     vector<int> stone_loc;
     void constructGraph(vector<vector<int>> maze){
