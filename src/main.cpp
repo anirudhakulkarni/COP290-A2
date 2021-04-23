@@ -8,24 +8,13 @@
 #include <thread>
 #include <iostream>
 #include <stdint.h>
+#include <vector>
 #include "constants.h"
+#include "select.hpp"
+
 using namespace std;
-// int map[15][20] = {
-//     {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
-//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-//     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//     {0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0},
-//     {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-//     {0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0},
-//     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//     {0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0},
-//     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-//     {1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1},
-//     {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
-//     {1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
-//     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
+int xsize = 37; //2*x-3
+int ysize = 37; //2*y-3
 int map[37][37];
 SDL_Texture *get_map_texture(SDL_Renderer *renderer)
 {
@@ -74,17 +63,17 @@ int main()
     // }
     // fclose(fptr);
     freopen("matrix.out", "r", stdin);
-    for (int i = 0; i < 37; i++)
+    for (int i = 0; i < xsize; i++)
     {
-        for (int j = 0; j < 37; j++)
+        for (int j = 0; j < ysize; j++)
         {
             cin >> map[i][j];
             // fscanf(fptr, "%1d", &map[i][j]);
         }
     }
-    for (int i = 0; i < 37; i++)
+    for (int i = 0; i < xsize; i++)
     {
-        for (int j = 0; j < 37; j++)
+        for (int j = 0; j < ysize; j++)
         {
             printf("%d", map[i][j]);
         }
@@ -122,17 +111,46 @@ int main()
         return 1;
     }
     map = get_map_texture(renderer);
+    vector<pair<int, int>> selectedpoints = select_points(renderer, map, font);
     int key = 0;
-    while (1)
+    cin >> key;
+    cout << key << "DONE" << endl;
+    int x = 0, y = 0;
+    SDL_Event e;
+
+    while (true)
     {
+        if (SDL_PollEvent(&e))
+        {
+            if (e.type == SDL_QUIT)
+            {
+                break;
+            }
+        }
         std::this_thread::sleep_for(std::chrono::milliseconds(30));
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, map, NULL, NULL);
         SDL_RenderPresent(renderer);
 
-        if (key == 1)
+        while (SDL_PollEvent(&e) != 0)
+        {
+            if (e.type == SDL_MOUSEMOTION)
+            {
+                SDL_GetGlobalMouseState(&x, &y);
+            }
+        }
+        if (e.type == SDL_KEYDOWN)
         {
             break;
         }
+        Uint32 SDL_GetMouseState(int &x, int &y);
+
+        cout << x << " " << y << endl;
     }
+    SDL_DestroyTexture(tex);
+    SDL_DestroyTexture(map);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+    return 0;
 }
