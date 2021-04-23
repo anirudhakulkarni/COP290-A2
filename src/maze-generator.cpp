@@ -19,8 +19,8 @@
 // #define movie   //this option spams bitmaps to illustrate each step of generation.
 using namespace std;
 long numin = 1; //Number of cells in the maze.
-const int xsize = 50;
-const int ysize = 10;
+const int xsize = 20;
+const int ysize = 20;
 
 void initialize();
 void generate();

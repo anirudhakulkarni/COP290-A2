@@ -6,9 +6,10 @@
 #include <unistd.h>
 #include <chrono>
 #include <thread>
-
+#include <iostream>
 #include <stdint.h>
 #include "constants.h"
+using namespace std;
 // int map[15][20] = {
 //     {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
 //     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -25,7 +26,7 @@
 //     {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
 //     {1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
 //     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
-int map[20][20];
+int map[37][37];
 SDL_Texture *get_map_texture(SDL_Renderer *renderer)
 {
     SDL_Surface *bitmap = NULL;
@@ -43,7 +44,7 @@ SDL_Texture *get_map_texture(SDL_Renderer *renderer)
     {
         for (j = 0; j < SCREEN_WIDTH / TILE_SIZE; j++)
         {
-            if (map[i][j])
+            if (!map[i][j])
             {
                 rect.x = TILE_SIZE * j;
                 rect.y = TILE_SIZE * i;
@@ -57,23 +58,33 @@ SDL_Texture *get_map_texture(SDL_Renderer *renderer)
 
 int main()
 {
-    FILE *fptr;
-    if ((fptr = fopen("matrix.out", "r")) == NULL)
+    // FILE *fptr;
+    // if ((fptr = fopen("matrix.out", "r")) == NULL)
+    // {
+    //     printf("Error! opening file");
+    //     exit(1);
+    // }
+    // for (int i = 0; i < 20; i++)
+    // {
+    //     for (int j = 0; j < 20; j++)
+    //     {
+    //         cin >> map[i][j];
+    //         // fscanf(fptr, "%1d", &map[i][j]);
+    //     }
+    // }
+    // fclose(fptr);
+    freopen("matrix.out", "r", stdin);
+    for (int i = 0; i < 37; i++)
     {
-        printf("Error! opening file");
-        exit(1);
-    }
-    for (int i = 0; i < 20; i++)
-    {
-        for (int j = 0; j < 20; j++)
+        for (int j = 0; j < 37; j++)
         {
-            fscanf(fptr, "%1d", &map[i][j]);
+            cin >> map[i][j];
+            // fscanf(fptr, "%1d", &map[i][j]);
         }
     }
-    fclose(fptr);
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 37; i++)
     {
-        for (int j = 0; j < 20; j++)
+        for (int j = 0; j < 37; j++)
         {
             printf("%d", map[i][j]);
         }
@@ -111,14 +122,14 @@ int main()
         return 1;
     }
     map = get_map_texture(renderer);
-    int key;
+    int key = 0;
     while (1)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(30));
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, map, NULL, NULL);
         SDL_RenderPresent(renderer);
-        scanf("%d", &key);
+
         if (key == 1)
         {
             break;
