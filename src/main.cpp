@@ -11,6 +11,7 @@
 #include <vector>
 #include "constants.h"
 #include "select.hpp"
+#include "travel.hpp"
 
 using namespace std;
 int xsize = 37;       //2*x-3 dynamic
@@ -106,7 +107,24 @@ int main()
     {
         cout << selectedpoints[i].first << " " << selectedpoints[i].second << endl;
     }
+    // REMEMBER
+    // CAUTION
+    // points are in X,Y format but indexing in matrix is Y,X
+    // 5. travel the points
+    vector<pair<int, int>> path;
+    path.push_back(make_pair(1, 1));
+    path.push_back(make_pair(1, 2));
+    path.push_back(make_pair(1, 3));
+    path.push_back(make_pair(1, 4));
+    path.push_back(make_pair(1, 5));
+    path.push_back(make_pair(1, 6));
+    path.push_back(make_pair(1, 7));
+    path.push_back(make_pair(2, 7));
+    path.push_back(make_pair(3, 7));
+    path.push_back(make_pair(3, 6));
+    display(renderer, map, path);
     // 5. displaying
+
     int key = 0;
     cin >> key;
     cout << key << "DONE" << endl;
