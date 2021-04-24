@@ -47,28 +47,13 @@ SDL_Texture *get_map_texture(SDL_Renderer *renderer)
 
 int main()
 {
-    // FILE *fptr;
-    // if ((fptr = fopen("matrix.out", "r")) == NULL)
-    // {
-    //     printf("Error! opening file");
-    //     exit(1);
-    // }
-    // for (int i = 0; i < 20; i++)
-    // {
-    //     for (int j = 0; j < 20; j++)
-    //     {
-    //         cin >> map[i][j];
-    //         // fscanf(fptr, "%1d", &map[i][j]);
-    //     }
-    // }
-    // fclose(fptr);
+    // 1. Map reading from matrix.out
     freopen("matrix.out", "r", stdin);
     for (int i = 0; i < xsize; i++)
     {
         for (int j = 0; j < ysize; j++)
         {
             cin >> map[i][j];
-            // fscanf(fptr, "%1d", &map[i][j]);
         }
     }
     for (int i = 0; i < xsize; i++)
@@ -79,6 +64,8 @@ int main()
         }
         printf("\n");
     }
+
+    // 2. SDL initialization
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Init(SDL_INIT_VIDEO);
@@ -110,8 +97,16 @@ int main()
         SDL_Quit();
         return 1;
     }
+
+    // 3. Generate maze texture from matrix
     map = get_map_texture(renderer);
+    // 4. select points prompt
     vector<pair<int, int>> selectedpoints = select_points(renderer, map, font);
+    for (int i = 0; i < selectedpoints.size(); i++)
+    {
+        cout << selectedpoints[i].first << " " << selectedpoints[i].second << endl;
+    }
+    // 5. displaying
     int key = 0;
     cin >> key;
     cout << key << "DONE" << endl;
@@ -136,16 +131,17 @@ int main()
         {
             if (e.type == SDL_MOUSEMOTION)
             {
-                SDL_GetGlobalMouseState(&x, &y);
+                SDL_GetMouseState(&x, &y);
+                cout << x << " F " << y << endl;
             }
         }
         if (e.type == SDL_KEYDOWN)
         {
             break;
         }
-        Uint32 SDL_GetMouseState(int &x, int &y);
+        // Uint32 SDL_GetMouseState(int &x, int &y);
 
-        cout << x << " " << y << endl;
+        // cout << x << " " << y << endl;
     }
     SDL_DestroyTexture(tex);
     SDL_DestroyTexture(map);
