@@ -13,9 +13,9 @@
 #include "select.hpp"
 
 using namespace std;
-int xsize = 37; //2*x-3
-int ysize = 37; //2*y-3
-int map[37][37];
+int xsize = 37;       //2*x-3 dynamic
+int ysize = 37;       //2*y-3 dynamic
+int matrix[100][100]; // constant
 SDL_Texture *get_map_texture(SDL_Renderer *renderer)
 {
     SDL_Surface *bitmap = NULL;
@@ -33,7 +33,7 @@ SDL_Texture *get_map_texture(SDL_Renderer *renderer)
     {
         for (j = 0; j < SCREEN_WIDTH / TILE_SIZE; j++)
         {
-            if (!map[i][j])
+            if (!matrix[i][j])
             {
                 rect.x = TILE_SIZE * j;
                 rect.y = TILE_SIZE * i;
@@ -53,14 +53,14 @@ int main()
     {
         for (int j = 0; j < ysize; j++)
         {
-            cin >> map[i][j];
+            cin >> matrix[i][j];
         }
     }
     for (int i = 0; i < xsize; i++)
     {
         for (int j = 0; j < ysize; j++)
         {
-            printf("%d", map[i][j]);
+            printf("%d", matrix[i][j]);
         }
         printf("\n");
     }
@@ -78,8 +78,8 @@ int main()
         "game",
         SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED,
-        640,
-        480,
+        888,
+        888,
         0);
 
     if (window == NULL)
@@ -101,7 +101,7 @@ int main()
     // 3. Generate maze texture from matrix
     map = get_map_texture(renderer);
     // 4. select points prompt
-    vector<pair<int, int>> selectedpoints = select_points(renderer, map, font);
+    vector<pair<int, int>> selectedpoints = select_points(renderer, map, font, matrix);
     for (int i = 0; i < selectedpoints.size(); i++)
     {
         cout << selectedpoints[i].first << " " << selectedpoints[i].second << endl;

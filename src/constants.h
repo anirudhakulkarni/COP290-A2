@@ -3,10 +3,10 @@
 
 #include "stdbool.h"
 
-#define SCREEN_WIDTH 1920
-#define SCREEN_HEIGHT 1500
+#define SCREEN_WIDTH 888  // 37*TILE_SIZE
+#define SCREEN_HEIGHT 888 // 37*TILE_SIZE
 #define FRAME_TIME 16666
-#define TILE_SIZE 32
+#define TILE_SIZE 24
 #define GRAVITY 1
 #define MAX_VERTICAL_SPEED 25
 #define PLAYER_JUMP_POWER 25
