@@ -1,31 +1,10 @@
 //Purpy Pupple's amazing maze generator.
 //Released under the CC-BY-SA 3.0 License and the GFDL
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include "bits/stdc++.h"
-#define UP 0	//-y
-#define DOWN 1	//+y
-#define LEFT 2	//-x
-#define RIGHT 3 //+x
-#define OUTFILE "MAZE"
-#define WHITE fprintf(outfile, "%c%c%c", 255, 255, 255)
-#define BLACK fprintf(outfile, "%c%c%c", 0, 0, 0)
-#define RED fprintf(outfile, "%c%c%c", 0, 0, 255)
-
-#define nodeadend //generate a maze without any dead ends! (consequently, many solutions to maze)
-#define prim	  //enable this to generate mazes using prim's algorithm.
-// #define backtrack//enable this to generate mazes using depth-first search. Don't enable both.
-// #define movie   //this option spams bitmaps to illustrate each step of generation.
-using namespace std;
-long numin = 1; //Number of cells in the maze.
-const int xsize = 20;
-const int ysize = 20;
+#include "mazegenerator.hpp"
+long numinn = 1; //Number of cells in the maze.
+const int xxsize = 20;
+const int yysize = 20;
 // net size will be (2*xsize-3),(2*ysize-3)
-void initialize();
-void generate();
-void savebmp(int xspecial, int yspecial);
-
 struct cell
 {
 	bool in;		  //Is this cell in the maze?
@@ -34,9 +13,9 @@ struct cell
 	int prevx, prevy; //The coordinates of the previous cell, used for backtracking.
 };
 
-cell MAZE[xsize][ysize];
+cell MAZE[xxsize][yysize];
 
-int main()
+int maze_generate()
 {
 	srand((unsigned int)time(NULL)); //seed random number generator with system time
 	initialize();					 //initialize the maze
@@ -44,7 +23,7 @@ int main()
 #ifdef movie
 	for (int i = 1; i < 10; i++)
 	{
-		numin++;
+		numinn++;
 		savebmp(0, 0); //output the bitmap
 	}
 #else movie
@@ -56,15 +35,15 @@ int main()
 void initialize()
 {
 	//Initialize the maze!
-	for (int x = 0; x < xsize; x++)
+	for (int x = 0; x < xxsize; x++)
 	{
-		for (int y = 0; y < ysize; y++)
+		for (int y = 0; y < yysize; y++)
 		{
 			//The maze cells on the edges of the maze are "in" to provide padding. Otherwise, all maze cells are not in.
-			MAZE[x][y].in = (x == 0 || x == xsize - 1 || y == 0 || y == ysize - 1) ? 1 : 0;
+			MAZE[x][y].in = (x == 0 || x == xxsize - 1 || y == 0 || y == yysize - 1) ? 1 : 0;
 			//All maze cells have all walls existing by default, except the perimeter cells.
-			MAZE[x][y].up = (x == 0 || x == xsize - 1 || y == 0) ? 0 : 1;
-			MAZE[x][y].left = (x == 0 || y == 0 || y == ysize - 1) ? 0 : 1;
+			MAZE[x][y].up = (x == 0 || x == xxsize - 1 || y == 0) ? 0 : 1;
+			MAZE[x][y].left = (x == 0 || y == 0 || y == yysize - 1) ? 0 : 1;
 		}
 	}
 	return;
@@ -100,7 +79,7 @@ void generate()
 					}
 					break;
 				case DOWN:
-					if (MAZE[xcur][ycur + 1].up && ycur != ysize - 2)
+					if (MAZE[xcur][ycur + 1].up && ycur != yysize - 2)
 					{
 						success = 1;
 						MAZE[xcur][ycur + 1].up = 0;
@@ -114,7 +93,7 @@ void generate()
 					}
 					break;
 				case RIGHT:
-					if (MAZE[xcur + 1][ycur].left && xcur != xsize - 2)
+					if (MAZE[xcur + 1][ycur].left && xcur != xxsize - 2)
 					{
 						success = 1;
 						MAZE[xcur + 1][ycur].left = 0;
@@ -138,8 +117,8 @@ void generate()
 		do
 		{
 			//randomly find a cell that's in the maze
-			xcur = rand() % (xsize - 2) + 1;
-			ycur = rand() % (ysize - 2) + 1;
+			xcur = rand() % (xxsize - 2) + 1;
+			ycur = rand() % (yysize - 2) + 1;
 		} while (!MAZE[xcur][ycur].in ||
 				 MAZE[xcur][ycur - 1].in && MAZE[xcur][ycur + 1].in &&
 					 MAZE[xcur - 1][ycur].in && MAZE[xcur + 1][ycur].in);
@@ -194,8 +173,8 @@ void generate()
 			}
 		} while (!success);
 		MAZE[xcur][ycur].in = 1;
-		numin++; //Every iteration of this loop, one maze cell is added to the maze.
-	} while (numin < (xsize - 2) * (ysize - 2));
+		numinn++; //Every iteration of this loop, one maze cell is added to the maze.
+	} while (numinn < (xxsize - 2) * (yysize - 2));
 #ifdef movie
 	savebmp(xcur, ycur);
 #endif
@@ -208,14 +187,14 @@ void savebmp(int xspecial, int yspecial)
 	FILE *outfile;
 	int extrabytes, paddedsize;
 	int x, y, n;
-	int width = (xsize - 1) * 2 - 1;
-	int height = (ysize - 1) * 2 - 1;
+	int width = (xxsize - 1) * 2 - 1;
+	int height = (yysize - 1) * 2 - 1;
 	int arr[height][width] = {0};
 	extrabytes = (4 - ((width * 3) % 4)) % 4;
 
 	char filename[200];
 
-	sprintf(filename, "../outputs/%s_%dx%d_n%d.bmp", OUTFILE, xsize, ysize, numin);
+	sprintf(filename, "../outputs/%s_%dx%d_n%d.bmp", OUTFILE, xxsize, yysize, numinn);
 	paddedsize = ((width * 3) + extrabytes) * height;
 
 	unsigned int headers[13] = {paddedsize + 54, 0, 54, 40, width, height, 0, 0, paddedsize, 0, 0, 0, 0};

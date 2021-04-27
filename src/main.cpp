@@ -13,6 +13,7 @@
 #include "select.hpp"
 #include "travel.hpp"
 #include "steiner_tsp.hpp"
+#include "mazegenerator.hpp"
 using namespace std;
 int xsize = 37;       //2*x-3 dynamic
 int ysize = 37;       //2*y-3 dynamic
@@ -46,10 +47,15 @@ SDL_Texture *get_map_texture(SDL_Renderer *renderer)
     return map_texture;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     // int distances[1400][1400];
     // 1. Map reading from matrix.out
+    string arg1(argv[1]);
+    if (arg1.compare("new") == 0)
+    {
+        maze_generate();
+    }
     freopen("../outputs/matrix.out", "r", stdin);
     for (int i = 0; i < xsize; i++)
     {

@@ -11,14 +11,14 @@ SDL_Texture *load_texture2(SDL_Renderer *renderer, char *file)
 
 void display(SDL_Renderer *renderer, SDL_Texture *map, vector<pair<int, int>> path)
 {
-    SDL_RenderCopy(renderer, map, NULL, NULL);
+    // SDL_RenderCopy(renderer, map, NULL, NULL);
     SDL_Rect DestR;
     SDL_Texture *tex = NULL;
-    tex = load_texture2(renderer, "resources/player.bmp");
+    tex = load_texture2(renderer, "resources/bullet.bmp");
 
     for (int i = 0; i < path.size(); i++)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(20));
         cout << i << endl;
         DestR.x = (path[i].first) * 24;
         DestR.y = (path[i].second) * 24;
