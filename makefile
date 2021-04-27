@@ -1,11 +1,11 @@
-CC := gcc
+CC := g++
 # compiler flags:
 #  -g     - this flag adds debugging information to the executable file
 #  -Wall  - this flag is used to turn on most compiler warnings
 CFLAGS := -lSDL2_ttf -lpthread -I. -Wall
 LIBS:=`sdl2-config --cflags --libs`
 # add source files here
-SRCS := main.c server.c client.c
+SRCS := main.cpp mazegenerator.cpp select.cpp travel.cpp
 OBJS := $(SRCS:.c=.o)
 # name of executable
 EXEC := simulator
@@ -30,11 +30,11 @@ all: clean build run
 clean:
 	@echo Removing old build files :
 	$(RM) -r $(BUILD_DIR)
+	mkdir $(BUILD_DIR)
 build:
 	@echo Building project :
-	mkdir $(BUILD_DIR)
 	#cd $(SRC_DIR); $(CC) -o .$(BUILD_DIR)/$(EXEC) $(SRCS) $(LIBS) $(CFLAGS)
-	cd $(SRC_DIR); $(CC) -o ./$(BUILD_DIR)/$(EXEC) $(SRCS) $(LIBS) $(CFLAGS)
+	cd $(SRC_DIR); $(CC) -o .$(BUILD_DIR)/$(EXEC) $(SRCS) $(LIBS) $(CFLAGS)
 	@echo Generated the executable without errors ...
 run:
 	@echo Running the executable ...
