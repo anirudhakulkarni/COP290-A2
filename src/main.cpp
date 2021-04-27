@@ -103,6 +103,7 @@ int main()
     map = get_map_texture(renderer);
     // 4. select points prompt
     vector<pair<int, int>> selectedpoints = select_points(renderer, map, font, matrix);
+    cout << "points selected are: \n";
     for (int i = 0; i < selectedpoints.size(); i++)
     {
         cout << selectedpoints[i].first << " " << selectedpoints[i].second << endl;

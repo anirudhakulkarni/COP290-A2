@@ -39,9 +39,13 @@ std::vector<std::pair<int, int>> select_points(SDL_Renderer *renderer, SDL_Textu
             if (e.type == SDL_MOUSEBUTTONDOWN)
             {
                 SDL_GetMouseState(&x, &y);
-                cout << x << " clicked " << y << endl;
-                pointsarray.push_back(make_pair(x, y));
-                i++;
+
+                if (matrix[y / 24][x / 24])
+                {
+                    cout << (x / 24) << " clicked " << (y / 24) << endl;
+                    pointsarray.push_back(make_pair((x / 24), (y / 24)));
+                    i++;
+                }
             }
         }
         if (e.type == SDL_KEYDOWN)
@@ -54,12 +58,12 @@ std::vector<std::pair<int, int>> select_points(SDL_Renderer *renderer, SDL_Textu
         // SDL_RenderCopy(renderer, map, NULL, NULL);
         if (pointsarray.size() > i)
         {
-            DestR.x = (pointsarray[i].first / 24) * 24;
-            DestR.y = (pointsarray[i].second / 24) * 24;
+            DestR.x = (pointsarray[i].first) * 24;
+            DestR.y = (pointsarray[i].second) * 24;
             DestR.w = 24;
             DestR.h = 24;
-            if (matrix[DestR.y / 24][DestR.x / 24])
-                SDL_RenderCopy(renderer, tex, NULL, &DestR);
+            // if (matrix[DestR.y / 24][DestR.x / 24])
+            SDL_RenderCopy(renderer, tex, NULL, &DestR);
         }
         temprenderer = renderer;
         SDL_RenderPresent(renderer);
