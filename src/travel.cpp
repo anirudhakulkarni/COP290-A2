@@ -18,7 +18,7 @@ void display(SDL_Renderer *renderer, SDL_Texture *map, vector<pair<int, int>> pa
 
     for (int i = 0; i < path.size(); i++)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         cout << i << endl;
         DestR.x = (path[i].first) * 24;
         DestR.y = (path[i].second) * 24;
@@ -27,4 +27,7 @@ void display(SDL_Renderer *renderer, SDL_Texture *map, vector<pair<int, int>> pa
         SDL_RenderCopy(renderer, tex, NULL, &DestR);
         SDL_RenderPresent(renderer);
     }
+    SDL_RenderPresent(renderer);
+    int j;
+    cin >> j;
 }

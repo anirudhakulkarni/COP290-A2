@@ -12,7 +12,7 @@
 #include "constants.h"
 #include "select.hpp"
 #include "travel.hpp"
-
+#include "steiner_tsp.hpp"
 using namespace std;
 int xsize = 37;       //2*x-3 dynamic
 int ysize = 37;       //2*y-3 dynamic
@@ -49,7 +49,7 @@ SDL_Texture *get_map_texture(SDL_Renderer *renderer)
 int main()
 {
     // 1. Map reading from matrix.out
-    freopen("matrix.out", "r", stdin);
+    freopen("../outputs/matrix.out", "r", stdin);
     for (int i = 0; i < xsize; i++)
     {
         for (int j = 0; j < ysize; j++)
@@ -107,21 +107,42 @@ int main()
     {
         cout << selectedpoints[i].first << " " << selectedpoints[i].second << endl;
     }
+
     // REMEMBER
     // CAUTION
     // points are in X,Y format but indexing in matrix is Y,X
     // 5. travel the points
-    vector<pair<int, int>> path;
-    path.push_back(make_pair(1, 1));
-    path.push_back(make_pair(1, 2));
-    path.push_back(make_pair(1, 3));
-    path.push_back(make_pair(1, 4));
-    path.push_back(make_pair(1, 5));
-    path.push_back(make_pair(1, 6));
-    path.push_back(make_pair(1, 7));
-    path.push_back(make_pair(2, 7));
-    path.push_back(make_pair(3, 7));
-    path.push_back(make_pair(3, 6));
+    cout << "Matrix start\n";
+    vector<vector<int>> maze_mat_a(xsize, vector<int>(ysize));
+    for (int i = 0; i < xsize; i++)
+    {
+        for (int j = 0; j < ysize; j++)
+        {
+            maze_mat_a[i][j] = matrix[i][j];
+        }
+    }
+    cout << "Matrix done\n";
+    pair<int, int> starting_point_a = selectedpoints[0];
+    pair<int, int> ending_point_a = selectedpoints[1];
+    vector<pair<int, int>> stone_coordinates_a = selectedpoints;
+    cout << "Path start\n";
+    vector<pair<int, int>> path = maincopy(maze_mat_a, starting_point_a, ending_point_a, stone_coordinates_a);
+    cout << "path done\n";
+    for (int i = 0; i < path.size(); i++)
+    {
+        cout << path[i].first << " " << path[i].second << endl;
+    }
+
+    // path.push_back(make_pair(1, 1));
+    // path.push_back(make_pair(1, 2));
+    // path.push_back(make_pair(1, 3));
+    // path.push_back(make_pair(1, 4));
+    // path.push_back(make_pair(1, 5));
+    // path.push_back(make_pair(1, 6));
+    // path.push_back(make_pair(1, 7));
+    // path.push_back(make_pair(2, 7));
+    // path.push_back(make_pair(3, 7));
+    // path.push_back(make_pair(3, 6));
     display(renderer, map, path);
     // 5. displaying
 
@@ -130,37 +151,37 @@ int main()
     cout << key << "DONE" << endl;
     int x = 0, y = 0;
     SDL_Event e;
+    // Useless work
+    // while (true)
+    // {
+    //     if (SDL_PollEvent(&e))
+    //     {
+    //         if (e.type == SDL_QUIT)
+    //         {
+    //             break;
+    //         }
+    //     }
+    //     std::this_thread::sleep_for(std::chrono::milliseconds(30));
+    //     SDL_RenderClear(renderer);
+    //     SDL_RenderCopy(renderer, map, NULL, NULL);
+    //     SDL_RenderPresent(renderer);
 
-    while (true)
-    {
-        if (SDL_PollEvent(&e))
-        {
-            if (e.type == SDL_QUIT)
-            {
-                break;
-            }
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(30));
-        SDL_RenderClear(renderer);
-        SDL_RenderCopy(renderer, map, NULL, NULL);
-        SDL_RenderPresent(renderer);
+    //     while (SDL_PollEvent(&e) != 0)
+    //     {
+    //         if (e.type == SDL_MOUSEMOTION)
+    //         {
+    //             SDL_GetMouseState(&x, &y);
+    //             cout << x << " F " << y << endl;
+    //         }
+    //     }
+    //     if (e.type == SDL_KEYDOWN)
+    //     {
+    //         break;
+    //     }
+    //     // Uint32 SDL_GetMouseState(int &x, int &y);
 
-        while (SDL_PollEvent(&e) != 0)
-        {
-            if (e.type == SDL_MOUSEMOTION)
-            {
-                SDL_GetMouseState(&x, &y);
-                cout << x << " F " << y << endl;
-            }
-        }
-        if (e.type == SDL_KEYDOWN)
-        {
-            break;
-        }
-        // Uint32 SDL_GetMouseState(int &x, int &y);
-
-        // cout << x << " " << y << endl;
-    }
+    //     // cout << x << " " << y << endl;
+    // }
     SDL_DestroyTexture(tex);
     SDL_DestroyTexture(map);
     SDL_DestroyRenderer(renderer);
