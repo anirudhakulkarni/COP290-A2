@@ -125,7 +125,19 @@ int main()
     cout << "Matrix done\n";
     pair<int, int> starting_point_a = selectedpoints[0];
     pair<int, int> ending_point_a = selectedpoints[1];
-    vector<pair<int, int>> stone_coordinates_a = selectedpoints;
+
+    vector<pair<int, int>> stone_coordinates_a(selectedpoints.size() - 2);
+    for (int i = 0; i < selectedpoints.size() - 2; i++)
+    {
+        stone_coordinates_a[i] = selectedpoints[i + 2];
+    }
+    cout << "starting point: " << starting_point_a.first << " " << starting_point_a.second << endl;
+    cout << "ending point: " << ending_point_a.first << " " << ending_point_a.second << endl;
+    cout << "stone coordinates are: \n";
+    for (int i = 0; i < selectedpoints.size() - 2; i++)
+    {
+        cout << stone_coordinates_a[i].first << " " << stone_coordinates_a[i].second << endl;
+    }
     cout << "Path start\n";
     vector<pair<int, int>> path = maincopy(maze_mat_a, starting_point_a, ending_point_a, stone_coordinates_a);
     cout << "path done\n";
