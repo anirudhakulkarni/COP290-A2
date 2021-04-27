@@ -40,7 +40,7 @@ run:
 	@echo Running the executable ...
 	cd $(SRC_DIR); ./$(EXEC)
 
-.PHONY: all clean build run temp
-temp:
+.PHONY: all clean build run maze
+maze:
 	g++ -o ./build/maze_generator ./src/maze-generator.cpp
 	cd ./build; ./maze_generator
