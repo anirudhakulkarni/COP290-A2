@@ -9,13 +9,6 @@ pair<int, int> starting_point;
 pair<int, int> ending_point;
 vector<pair<int, int>> stone_coordinates;
 
-/*
-    0 -> wall
-    1 -> free path
-    2 -> Stones
-    3 - Start
-    4 - end
-*/
 class Graph
 {
 
@@ -92,30 +85,10 @@ public:
             cout << endl;
         }
     }
-    // void calulate_distances_bfs(int start, int *distances[][]){
-    //     queue<int> temp;
-    //     temp.push(start);
-    //     bool visited[size] = {false};
-    //     visited[start] = true;
-    //     int curr_dist = 0;
-    //     distances[start][start] = 0;
-    //     while(!temp.empty()){
-    //         int top = temp.front();
-    //         temp.pop();
-    //         for(auto x : adj[top]){
-    //             if (!visited[x]){
-    //                 temp.push(x);
-    //                 distances[start][x] = distances[start][top]+1;
-    //                 visited[x] = true;
-    //             }
-    //         }
-    //     }
-    // }
     vector<pair<int, int>> evaluate()
     {
-
         cout << "initial\n";
-        int distances[1600][1600];
+        int distances[1000][1000];
         cout << "initial\n";
         for (int i = 0; i < size; i++)
         {
@@ -134,7 +107,7 @@ public:
             //cout << "This is stone" << stone << endl;
             queue<int> temp;
             temp.push(stone);
-            bool visited[size] = {false};
+            bool visited[1000] = {false};
             visited[stone] = true;
             int curr_dist = 0;
             distances[stone][stone] = 0;
@@ -213,10 +186,10 @@ public:
             int stone = order_to_traverse[it];
             int final = order_to_traverse[it + 1];
             //cout << "Milestone---" << stone << " " << final << endl;
-            int parents[size] = {-2};
+            int parents[1000] = {-2};
             queue<int> temp;
             temp.push(stone);
-            bool visited[size] = {false};
+            bool visited[1000] = {false};
             visited[stone] = true;
             parents[stone] = -1;
             while (!temp.empty())
