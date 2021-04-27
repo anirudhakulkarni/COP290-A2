@@ -48,6 +48,7 @@ SDL_Texture *get_map_texture(SDL_Renderer *renderer)
 
 int main()
 {
+    // int distances[1400][1400];
     // 1. Map reading from matrix.out
     freopen("../outputs/matrix.out", "r", stdin);
     for (int i = 0; i < xsize; i++)

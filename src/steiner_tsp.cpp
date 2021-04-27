@@ -8,12 +8,13 @@ vector<vector<int>> maze_mat;
 pair<int, int> starting_point;
 pair<int, int> ending_point;
 vector<pair<int, int>> stone_coordinates;
+int distances[1370][1370];
 
 class Graph
 {
 
 public:
-    vector<int> adj[100000];
+    vector<int> adj[1500];
     int start, end, stones, cols, rows, size;
     vector<int> stone_loc;
     void constructGraph(vector<vector<int>> maze)
@@ -24,7 +25,7 @@ public:
         cols = maze[0].size();
         stones = 0;
         //cout << "here5" << endl;
-        for (int it = 0; it < size; it++)
+        for (int it = 0; it <= size; it++)
         {
             adj[it].clear();
             //cout << "here6" << endl;
@@ -35,7 +36,7 @@ public:
         end = ending_point.first * cols + ending_point.second;
         for (auto stone_coor : stone_coordinates)
         {
-            stone_loc.push_back(stone_coor.first * cols + stone_coor.second);
+            stone_loc.push_back(stone_coor.second * cols + stone_coor.first);
             stones++;
         }
         for (int row = 1; row < rows - 1; row++)
@@ -87,8 +88,8 @@ public:
     }
     vector<pair<int, int>> evaluate()
     {
+
         cout << "initial\n";
-        int distances[1000][1000];
         cout << "initial\n";
         for (int i = 0; i < size; i++)
         {
@@ -107,10 +108,10 @@ public:
             //cout << "This is stone" << stone << endl;
             queue<int> temp;
             temp.push(stone);
-            bool visited[1000] = {false};
+            bool visited[1370] = {false};
             visited[stone] = true;
-            int curr_dist = 0;
             distances[stone][stone] = 0;
+            //cout << "start here" << stone / cols << " " << stone % cols << endl;
             while (!temp.empty())
             {
                 int top = temp.front();
@@ -120,6 +121,7 @@ public:
                     if (!visited[x])
                     {
                         //cout << x <<  "->" << distances[stone][top]+1 << endl;
+                        //cout << x / cols << " " << x % cols << endl;
                         temp.push(x);
                         distances[stone][x] = distances[stone][top] + 1;
                         visited[x] = true;
@@ -132,7 +134,7 @@ public:
         {
             for (auto stone2 : stone_loc)
             {
-                //cout << stone1 << " " << stone2 << " " << distances[stone1][stone2] << " " << distances[stone2][stone1] << endl;
+                cout << stone1 << " " << stone2 << " " << distances[stone1][stone2] << " " << distances[stone2][stone1] << endl;
                 if (distances[stone1][stone2] == -1)
                 {
                     //cout << stone1 << "<->" << stone2 << endl;
@@ -174,10 +176,11 @@ public:
         vector<pair<int, int>> output_coordinates;
         order_to_traverse.insert(order_to_traverse.begin(), start);
         order_to_traverse.push_back(end);
-        //     cout << "Order to traverse => ";
-        // for (auto x : order_to_traverse){
-        //     cout << x << " ";
-        // }
+        cout << "Order to traverse => ";
+        for (auto x : order_to_traverse)
+        {
+            cout << x / cols << " " << x % cols << endl;
+        }
         cout << endl;
 
         cout << "second last for loop done\n";
@@ -186,10 +189,10 @@ public:
             int stone = order_to_traverse[it];
             int final = order_to_traverse[it + 1];
             //cout << "Milestone---" << stone << " " << final << endl;
-            int parents[1000] = {-2};
+            int parents[1370] = {-2};
             queue<int> temp;
             temp.push(stone);
-            bool visited[1000] = {false};
+            bool visited[1370] = {false};
             visited[stone] = true;
             parents[stone] = -1;
             while (!temp.empty())
@@ -212,7 +215,7 @@ public:
                             {
                                 //output_coordinates.insert(output_coordinates.begin(), make_pair(x / cols, x % cols));
                                 //cout << x/ cols << " " << x % cols << endl
-                                tempvec.push_back(make_pair(x / cols, x % cols));
+                                tempvec.push_back(make_pair(x % cols, x / cols));
                                 x = parents[x];
                             }
                             reverse(tempvec.begin(), tempvec.end());
@@ -224,7 +227,7 @@ public:
                 }
             }
         }
-        output_coordinates.push_back(make_pair(end / cols, end % cols));
+        output_coordinates.push_back(make_pair(end % cols, end / cols));
         //cout << "Hello" << endl;
 
         cout << "writing to location\n";
@@ -241,10 +244,22 @@ vector<pair<int, int>> maincopy(vector<vector<int>> maze_mat_a, pair<int, int> s
 {
     cout << "Maincopy called\n";
     maze_mat = maze_mat_a;
-    starting_point = starting_point_a;
-    ending_point = ending_point_a;
+    starting_point = make_pair(starting_point_a.second, starting_point_a.first);
+    ending_point = make_pair(ending_point_a.second, ending_point_a.first);
     stone_coordinates = stone_coordinates_a;
     Graph G;
+    // for(int i = 0; i < maze_mat.size(); i++){
+    //     for(int j = 0; j < maze_mat[0].size(); j++){
+    //         cout << maze_mat[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
+    // for(auto x : stone_coordinates){
+    //     cout << x.first << " " << x.second << endl;
+    // }
+    // cout << "start is " << starting_point.first << " " << starting_point.second;
+    // cout << "end is " << ending_point.first << " " << ending_point.second;
+    // cout << endl;
     G.constructGraph(maze_mat);
     //G.show_adj_list();
     cout << "Evaluation start\n";
