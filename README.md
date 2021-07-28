@@ -6,10 +6,9 @@ Visualize path finding algorithm
 
 1. To install clone the repo, navigate to `src` and run `make all`
 2. Debugging:
-    1. To generate random maze `make maze`
-    2. To eject the repo `make clean`
-    3. To test build `make build`
-    1. To run `make run`
+    1. To eject the repo `make clean`
+    2. To test build `make build`
+    3. To run `make run`
 
 Libraries:
 * sdl2 `brew install sdl2`
