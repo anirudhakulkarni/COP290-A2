@@ -292,15 +292,18 @@ void savebmp(int xspecial, int yspecial)
 	}
 	printf("file printed: %s\n", filename);
 	fclose(outfile);
-	freopen("../outputs/matrix.out", "w", stdout);
+	// Write to a dedicated stream: redirecting stdout here left the matrix
+	// unflushed when main() reads it back, and sent all later output into the file.
+	ofstream matrixout("../outputs/matrix.out");
 
 	for (y = 0; y <= height - 1; y++)
 	{
 		for (x = 0; x <= width - 1; x++)
 		{
-			cout << arr[height - 1 - y][x] << " "; // Height is reversed as bmp saves image from bottom
+			matrixout << arr[height - 1 - y][x] << " "; // Height is reversed as bmp saves image from bottom
 		}
-		cout << endl;
+		matrixout << endl;
 	}
+	matrixout.close();
 	return;
 }
